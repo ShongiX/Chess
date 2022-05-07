@@ -17,7 +17,7 @@ protected:
     bool _isDown = false; //is the list dropped down
     float _buttonWidth = 0.2;
 public:
-    Dropdown(PrimeWindow* pw, int x, int y, int sx, int sy, std::vector<std::string> items, int visible);
+    Dropdown(Menu* m, int x, int y, int sx, int sy, std::vector<std::string> items, int visible);
     void draw() override;
     void handle(const genv::event& ev) override;
     bool isFocus(const genv::event& ev) const override;

@@ -6,7 +6,7 @@
 
 using namespace genv;
 
-Numeric::Numeric(PrimeWindow *pw, int x, int y, int sx, int sy, int minLimit, int maxLimit) : Widget(pw,x,y,sx,sy), _minLimit(minLimit), _maxLimit(maxLimit) {
+Numeric::Numeric(Menu *m, int x, int y, int sx, int sy, int minLimit, int maxLimit) : Widget(m,x,y,sx,sy), _minLimit(minLimit), _maxLimit(maxLimit) {
     _value = _minLimit;
 }
 

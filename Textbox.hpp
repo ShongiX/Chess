@@ -2,8 +2,8 @@
 // Created by laccs on 3/31/2022.
 //
 
-#ifndef WIDGET_TEXTBOX_HPP
-#define WIDGET_TEXTBOX_HPP
+#ifndef SAKK_TEXTBOX_HPP
+#define SAKK_TEXTBOX_HPP
 
 #include "Widget.hpp"
 
@@ -22,7 +22,7 @@ protected:
     void deleteChar();
 
 public:
-    Textbox(PrimeWindow* pw, int x, int y, int sx, int sy);
+    Textbox(Menu* m, int x, int y, int sx, int sy);
     void draw() override;
     void handle(const genv::event& ev) override;
     bool isFocusable() override;
@@ -31,4 +31,4 @@ public:
 };
 
 
-#endif //WIDGET_TEXTBOX_HPP
+#endif //SAKK_TEXTBOX_HPP

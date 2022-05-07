@@ -2,13 +2,11 @@
 // Created by laccs on 4/7/2022.
 //
 
-#ifndef WIDGET_BUTTON_HPP
-#define WIDGET_BUTTON_HPP
+#ifndef SAKK_BUTTON_HPP
+#define SAKK_BUTTON_HPP
 
 #include "Widget.hpp"
 #include <functional>
-
-class PrimeWindow;
 
 enum ButtonState {NEUTRAL, HOVER, CLICKED};
 
@@ -17,7 +15,7 @@ class Button : public Widget {
     std::function<void()> _func = std::function<void()>();
     ButtonState _state = NEUTRAL;
 public:
-    Button(PrimeWindow* pw,int x, int y, int sx, int sy, std::string name,std::function<void()> func);
+    Button(Menu* m,int x, int y, int sx, int sy, std::string name,std::function<void()> func);
 
     void handle(const genv::event& ev) override;
     void draw() override;
@@ -30,4 +28,4 @@ public:
 };
 
 
-#endif //WIDGET_BUTTON_HPP
+#endif //SAKK_BUTTON_HPP

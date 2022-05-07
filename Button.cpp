@@ -3,13 +3,16 @@
 //
 
 #include "Button.hpp"
-#include "PrimeWindow.hpp"
+
+#include <utility>
 
 using namespace genv;
 
-Button::Button(PrimeWindow* pw,int _x, int _y, int _sx, int sy, std::string name, std::function<void()> func) : Widget(pw,_x,_y,_sx,sy) {
+class Menu;
+
+Button::Button(Menu* m,int x, int y, int sx, int sy, std::string name, std::function<void()> func) : Widget(m,x,y,sx,sy) {
     _name = std::move(name);
-    _func = func;
+    _func = std::move(func);
 }
 
 void Button::handle(const genv::event& ev) {

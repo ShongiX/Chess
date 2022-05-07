@@ -6,8 +6,8 @@
 
 using namespace genv;
 
-Dropdown::Dropdown(PrimeWindow *pw, int x, int y, int sx, int sy, std::vector<std::string> items, int visible)
-        : Widget(pw,x,y,sx,sy), _items(std::move(items)), _visible(visible) {}
+Dropdown::Dropdown(Menu *m, int x, int y, int sx, int sy, std::vector<std::string> items, int visible)
+        : Widget(m,x,y,sx,sy), _items(std::move(items)), _visible(visible) {}
 
 void Dropdown::draw() {
     //Box

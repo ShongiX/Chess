@@ -7,7 +7,7 @@
 
 using namespace genv;
 
-Textbox::Textbox(PrimeWindow* pw, int x, int y, int sx, int sy) : Widget(pw, x, y, sx, sy) {}
+Textbox::Textbox(Menu* m, int x, int y, int sx, int sy) : Widget(m, x, y, sx, sy) {}
 
 bool Textbox::isEmpty() {
     if (_string.empty()) return true;

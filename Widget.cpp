@@ -3,10 +3,10 @@
 //
 
 #include "Widget.hpp"
-#include "PrimeWindow.hpp"
+#include "Menu.hpp"
 
-Widget::Widget(PrimeWindow* pw, int x, int y, int sx, int sy) : _pw(pw), _x(x), _y(y), _sx(sx), _sy(sy){
-    _pw->addWidget(this);
+Widget::Widget(Menu* m, int x, int y, int sx, int sy) : _m(m), _x(x), _y(y), _sx(sx), _sy(sy){
+    _m->addWidget(this);
 }
 
 bool Widget::isFocus(const genv::event &ev) const {

@@ -6,7 +6,7 @@
 
 using namespace genv;
 
-Text::Text(PrimeWindow* pw,int x, int y, int sx, int sy, const std::string& str) : Widget(pw,x,y,sx,sy) {
+Text::Text(Menu* m,int x, int y, int sx, int sy, const std::string& str) : Widget(m,x,y,sx,sy) {
     _string = str;
 }
 
