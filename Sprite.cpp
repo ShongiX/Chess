@@ -9,10 +9,8 @@ Pixel::Pixel(int xx, int yy, char rr, char gg, char bb) : x(xx), y(yy)  {
     c = Color(rr,gg,bb);
 }
 
-Sprite::Sprite(const std::string &fileName,int xx,int yy) {
+Sprite::Sprite(Menu* m,int x,int y,const std::string &fileName) : Widget(m,x,y,0,0) {
     loadFromFile(fileName);
-    _x = xx;
-    _y = yy;
 }
 
 void Sprite::loadFromFile(const std::string& fileName) {
@@ -34,4 +32,8 @@ void Sprite::draw() {
     for (Pixel &pixel : _pixels) {
         genv::gout << genv::move_to(pixel.x + _x, pixel.y + _y) << genv::color(pixel.c.r, pixel.c.g, pixel.c.b) << genv::dot;
     }
+}
+
+bool Sprite::isFocusable() {
+    return false;
 }

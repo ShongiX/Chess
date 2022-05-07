@@ -7,17 +7,25 @@
 
 using namespace genv;
 
-void Menu::draw() {
-    for (Widget* widget : _widgets) {
-        widget->draw();
-    }
+void Menu::draw(int focus) {
+    for (Widget* widget : _widgets) widget->draw();
+    if (focus != -1) _widgets[focus]->draw();
 }
 
-void Menu::handle(const event& ev) {
+void Menu::handle(const event& ev, int &focus) {
     if (ev.type == ev_mouse) {
-        for (Widget* widget : _widgets) {
-            widget->handle(ev);
+        for (size_t i = 0; i < _widgets.size(); i++) {
+            if (_widgets[i]->isFocus(ev) && _widgets[i]->isFocusable()) {
+                if (focus != -1 && (signed)i!=focus) _widgets[focus]->setFocus(false);
+                focus = (signed)i;
+                break;
+            }
         }
+    }
+
+    if (focus != -1) {
+        _widgets[focus]->setFocus(true);
+        _widgets[focus]->handle(ev);
     }
 }
 

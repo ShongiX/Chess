@@ -8,12 +8,9 @@
 #include "Widget.hpp"
 #include <functional>
 
-enum ButtonState {NEUTRAL, HOVER, CLICKED};
-
 class Button : public Widget {
     std::string _name;
     std::function<void()> _func = std::function<void()>();
-    ButtonState _state = NEUTRAL;
 public:
     Button(Menu* m,int x, int y, int sx, int sy, std::string name,std::function<void()> func);
 
@@ -25,6 +22,7 @@ public:
     const std::string &getName() const;
 
     bool pressed = false;
+    bool released = false;
 };
 
 

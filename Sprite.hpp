@@ -13,10 +13,11 @@ class Sprite : public Widget {
     std::vector<Pixel> _pixels;
 
 public:
-    Sprite(const std::string& fileName,int xx,int yy);
+    Sprite(Menu* m,int x,int y,const std::string& fileName);
 
     void loadFromFile(const std::string& fileName);
     void draw() override;
+    bool isFocusable() override;
 };
 
 struct Pixel {

@@ -12,8 +12,8 @@ protected:
     std::vector<Widget*> _widgets;
 
 public:
-    virtual void draw();
-    virtual void handle(const genv::event& ev);
+    virtual void draw(int focus);
+    virtual void handle(const genv::event& ev, int &focus);
 
     void addWidget(Widget *w);
 };

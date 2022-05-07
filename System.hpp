@@ -8,7 +8,7 @@
 #include <map>
 #include "graphics.hpp"
 
-enum State {NONE, MAIN, PLAY, RULES, CREDITS, DEAD};
+enum State {NONE, MAIN, PLAY, RULES, INFO, CREDITS};
 
 class Menu;
 
@@ -17,15 +17,23 @@ class System {
     const int _YY = 800;
 
     const int _FPS = 25;
-    const int REFRESH = 12; //game loop wait time
+    const int _REFRESH = 12; //game loop wait time
 
     genv::event _ev;
+    int _focus = -1;
 
     Menu* _activeMenu = nullptr;
     std::map<State, Menu*> _menus;
     State _state = MAIN;
 
     void changeState(State newState);
+
+    void buildMenu();
+    Menu* buildMainMenu();
+    Menu* buildRulesMenu();
+    Menu* buildInfoMenu();
+    Menu* buildCreditMenu();
+    Menu* buildGameMenu();
 
 public:
     System(int XX, int YY, int FPS);
