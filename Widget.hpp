@@ -22,6 +22,8 @@ public:
     virtual bool isFocus(const genv::event& ev) const;
     virtual bool isFocusable() = 0;
     virtual void setFocus(bool focus);
+
+    friend Menu;
 };
 
 struct Color {

@@ -2,6 +2,7 @@
 // Created by laccs on 3/13/2022.
 //
 
+#include <iostream>
 #include "Menu.hpp"
 #include "Sprite.hpp"
 
@@ -31,4 +32,8 @@ void Menu::handle(const event& ev, int &focus) {
 
 void Menu::addWidget(Widget *w) {
     _widgets.push_back(w);
+}
+
+void Menu::resetFocus(int focus) {
+    _widgets.at(focus)->setFocus(false);
 }

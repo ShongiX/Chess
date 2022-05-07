@@ -16,6 +16,7 @@ public:
     virtual void handle(const genv::event& ev, int &focus);
 
     void addWidget(Widget *w);
+    void resetFocus(int focus);
 };
 
 

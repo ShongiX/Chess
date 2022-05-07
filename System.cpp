@@ -24,9 +24,11 @@ System::System(int XX, int YY, int FPS) : _XX(XX), _YY(YY), _FPS(FPS) {
 }
 
 void System::changeState(State newState) {
+    _activeMenu->resetFocus(_focus);
+    _focus = -1;
+
     _state = newState;
     _activeMenu = _menus[newState];
-    _focus = -1;
 }
 
 void System::run() {
@@ -99,6 +101,8 @@ Menu *System::buildCreditMenu() {
 
 Menu *System::buildGameMenu() {
     Menu* menu = new Menu();
+
+    new Button(menu,_XX/2-BUTTON_WIDTH/2,_YY/4+BUTTON_HEIGHT*0.0,BUTTON_WIDTH,BUTTON_HEIGHT,"Back",[this](){changeState(State::MAIN);});
 
     return menu;
 }

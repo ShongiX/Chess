@@ -16,16 +16,23 @@ Button::Button(Menu* m,int x, int y, int sx, int sy, std::string name, std::func
 }
 
 void Button::handle(const genv::event& ev) {
+    int ex = ev.pos_x;
+    int ey = ev.pos_y;
+
     if (ev.button == btn_left) {
         pressed = true;
     } else if (ev.button == -btn_left) {
         pressed = false;
-        released = true;
     }
 
-    if (released && !pressed) {
-        _func();
-        released = false;
+    if (ex > _x && ex < _x+_sx && ey > _y && ey < _y+_sy && _state == ButtonState::NEUTRAL) _state = ButtonState::HOVER;
+    if ( !(ex > _x && ex < _x+_sx && ey > _y && ey < _y+_sy) && _state == ButtonState::HOVER) _state = ButtonState::NEUTRAL;
+    if (ex > _x && ex < _x+_sx && ey > _y && ey < _y+_sy && pressed) _state = ButtonState::CLICKED;
+    if (_state == ButtonState::CLICKED && !pressed) {
+        if (ex > _x && ex < _x+_sx && ey > _y && ey < _y+_sy) {
+            _func();
+        }
+        _state = ButtonState::NEUTRAL;
     }
 }
 
@@ -33,15 +40,15 @@ void Button::draw() {
     Color bc; //Box Color
     Color oc; //Outline Color
 
-    if (_focus && pressed) { //clicked
+    if (_state == ButtonState::NEUTRAL) {
+        bc = Color(100,100,100);
+        oc = Color(255,255,255);
+    } else if (_state == ButtonState::HOVER) {
+        bc = Color(150,150,150);
+        oc = Color(255,255,255);
+    } else {
         bc = Color(150,150,150);
         oc = Color(0,0,0);
-    } else if (_focus) { //hover
-        bc = Color(100,100,100);
-        oc = Color(255,255,255);
-    } else { //neutral
-        bc = Color(100,100,100);
-        oc = Color(255,255,255);
     }
 
     //Box
