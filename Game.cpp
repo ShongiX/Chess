@@ -43,10 +43,10 @@ Game::Game() {
     _gd->_boardType[6][i] = BISHOP;
     _gd->_boardType[7][i] = ROOK;
 
-    /*for (int i=0; i<GameData::BOARD_SIZE; i++) {
-        _gd->_boardType[i][1] = PAWN;
-        _gd->_boardType[i][6] = PAWN;
-    }*/
+    for (int j=0; j<GameData::BOARD_SIZE; j++) {
+        _gd->_boardType[j][1] = PAWN;
+        _gd->_boardType[j][6] = PAWN;
+    }
 }
 
 GameData *Game::getInfo() {
@@ -82,36 +82,38 @@ bool Game::checkDiag(int x, int y, int dx, int dy) {
     if (y-dy > 0) l = -1;
     else l = 1;
 
-    for (int i = x+k; i != dx; i+=k) {
-        for (int j = y+l; j != dy ; j+=l) {
+    for (int i = x+k; i != dx;) {
+        for (int j = y+l; j != dy ;) {
             if (_gd->_boardType[i][j] != NONE) return false;
+
+            i+=k;
+            j+=l;
         }
     }
     return true;
 }
 
 bool Game::canMove(int x, int y, int dx, int dy) {
-    printf("Attempted move from %d,%d to %d,%d\n",x,y,dx,dy);
-
     Type t = _gd->_boardType[x][y];
     Side s = _gd->_boardSide[x][y];
 
-    //check if King is in check is missing
+    std::cout << s << " " << t << " ";
+    printf("Attempted move from %d,%d to %d,%d\n",x,y,dx,dy);
+
     if (_gd->_boardSide[dx][dy] == s) return false;
     else {
-        if (t == QUEEN) { //no
-            if (abs(x-dx) != abs(y-dy)) return false;
-            return checkDiag(x,y,dx,dy) && checkLine(x,y,dx,dy);
-        } else if (t == ROOK) { //no
+        if (t == QUEEN) {
+            if (x == dx || y == dy) return checkLine(x,y,dx,dy);
+            if (abs(x-dx) == abs(y-dy)) return checkDiag(x,y,dx,dy);
+        } else if (t == ROOK) {
+            if (x != dx && y != dy) return false;
             return checkLine(x,y,dx,dy);
-        } else if (t == KNIGHT) { //no
-            return false;
-        } else if (t == BISHOP) { //ready
-            std::cout << "Bishop: check if diagonal move\n";
+        } else if (t == KNIGHT) {
+            if ((x - dx) * (x - dx) + (y - dy) * (y - dy) == 5) return true;
+        } else if (t == BISHOP) {
             if (abs(x-dx) != abs(y-dy)) return false;
-            std::cout << "Bishop: check if no piece in the way\n";
             return checkDiag(x,y,dx,dy);
-        } else if (t == PAWN) { //ready
+        } else if (t == PAWN) {
             if (s == WHITE) {
                 if (x == dx && dy-y == -1 && _gd->_boardType[dx][dy] == NONE) return true; //if one forward, no piece at destination
                 if (x == dx && dy-y == -2 && y == 6 && _gd->_boardType[dx][y-1] == NONE && _gd->_boardType[dx][dy] == NONE) return true; //if two forward, initial place and no piece at destination
@@ -123,8 +125,8 @@ bool Game::canMove(int x, int y, int dx, int dy) {
                 if (abs(x-dx) == 1 && dy-y == 1 && _gd->_boardType[dx][dy] != NONE) return true; //if one diagonal, piece taken
                 return false;
             }
-        } else { //KING //no
-
+        } else { //KING
+            if (abs(x-dx) <= 1 && abs(y-dy) <= 1) return true;
         }
     }
     return false;
@@ -138,6 +140,9 @@ void Game::move(int x, int y, int dx, int dy) {
     _gd->_boardSide[x][y] = NEITHER;
     std::cout << "Move from " << x << "," << y << " to " << dx << "," << dy << "\n";
 
-    //if (_gd->_sideToMove == WHITE) _gd->_sideToMove = BLACK;
-    //else _gd->_sideToMove = WHITE;
+    //change turn
+    if (_gd->_sideToMove == WHITE) _gd->_sideToMove = BLACK;
+    else _gd->_sideToMove = WHITE;
 }
+
+
