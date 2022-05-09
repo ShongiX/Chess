@@ -11,6 +11,8 @@
 
 class Board : public Widget {
 public:
+    static int _activeTileX;
+    static int _activeTileY;
     static const int TILE_SIZE = 100;
 
     Board(Menu* m,int x, int y, int sx, int sy);
@@ -18,7 +20,7 @@ public:
     bool isFocusable() override;
 };
 
-class Piece : public Sprite {
+/*class Piece : public Sprite {
 protected:
     Type _type;
     Side _side;
@@ -30,6 +32,6 @@ public:
     void handle(const genv::event& ev) override;
     bool isFocusable() override;
 };
-
+*/
 
 #endif //SAKK_PIECE_HPP

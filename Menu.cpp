@@ -2,11 +2,16 @@
 // Created by laccs on 3/13/2022.
 //
 
+#include <iostream>
 #include "Menu.hpp"
 #include "GameData.hpp"
 #include "Piece.hpp"
+#include "Controller.hpp"
 
 using namespace genv;
+
+int Board::_activeTileX = -1;
+int Board::_activeTileY = -1;
 
 void Menu::draw(int focus) {
     for (Widget* widget : _widgets) widget->draw();
@@ -43,6 +48,19 @@ void GameMenu::handle(const event &ev, int &focus) {
         int x = ev.pos_x / Board::TILE_SIZE;
         int y = ev.pos_y / Board::TILE_SIZE;
 
+        if (ev.button == btn_left) {
+            if (_gd->_boardSide[x][y] == _gd->_sideToMove) { //switching piece
+                Board::_activeTileX = x;
+                Board::_activeTileY = y;
+            } else { //attempting to move
+                 if (Controller::askIfCanMove(Board::_activeTileX,Board::_activeTileY,x,y)) {
+                     //green light
+                     Controller::move(Board::_activeTileX,Board::_activeTileY,x,y);
+                     Board::_activeTileX = -1;
+                     Board::_activeTileY = -1;
+                 }
+            }
+        }
 
     }
 }
@@ -51,11 +69,31 @@ void GameMenu::build() {
     Widget* tmp_board = _widgets.at(0);
     _widgets.clear();
     _widgets.push_back(tmp_board);
-
+    
     for (int i = 0; i < GameData::BOARD_SIZE; ++i) {
         for (int j = 0; j < GameData::BOARD_SIZE; ++j) {
-            if (_gd->_boardSide[i][j] != EITHER) {
-                new Piece(this,i*Board::TILE_SIZE,j*Board::TILE_SIZE,_gd->_boardType[i][j],_gd->_boardSide[i][j]);
+            Type t = _gd->_boardType[i][j];
+            Side s = _gd->_boardSide[i][j];
+            
+            if (s != NEITHER) {
+                
+                std::string fileName = "../resources/";
+                if (s == WHITE) {
+                    if (t == 0) {fileName += "wQ.txt";}
+                    else if (t == 1) {fileName += "wR.txt";}
+                    else if (t == 2) {fileName += "wN.txt";}
+                    else if (t == 3) {fileName += "wB.txt";}
+                    else if (t == 4) {fileName += "wP.txt";}
+                    else {fileName += "wK.txt";}
+                } else {
+                    if (t == 0) {fileName += "bQ.txt";}
+                    else if (t == 1) {fileName += "bR.txt";}
+                    else if (t == 2) {fileName += "bN.txt";}
+                    else if (t == 3) {fileName += "bB.txt";}
+                    else if (t == 4) {fileName += "bP.txt";}
+                    else {fileName += "bK.txt";}
+                }
+                new Sprite(this,i*Board::TILE_SIZE,j*Board::TILE_SIZE,fileName);
             }
         }
     }

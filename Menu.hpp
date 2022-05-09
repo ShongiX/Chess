@@ -24,6 +24,7 @@ public:
 
 class GameMenu : public Menu {
     GameData* _gd{};
+
 public:
     void handle(const genv::event& ev, int &focus) override;
     void build();

@@ -5,7 +5,7 @@
 #ifndef SAKK_ENUMS_HPP
 #define SAKK_ENUMS_HPP
 
-enum Side {WHITE, BLACK, EITHER};
+enum Side {WHITE, BLACK, NEITHER};
 enum Type {QUEEN, ROOK, KNIGHT, BISHOP, PAWN, KING, NONE};
 
 #endif //SAKK_ENUMS_HPP

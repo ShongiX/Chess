@@ -19,11 +19,22 @@ void Board::draw() {
             }
         }
     }
+
+    if (_activeTileX != -1) {
+        Color backgroundC;
+        if ((_x/_sx + _y/_sy )%2 == 0) backgroundC = Color(240,217,181);
+        else backgroundC = Color(181,136,99);
+
+        Color tileC(255,255,0);
+        tileC = tileC.opacity(backgroundC,0.4);
+
+        gout << move_to(_activeTileX*TILE_SIZE,_activeTileY*TILE_SIZE) << color(tileC.r,tileC.g,tileC.b) << box(TILE_SIZE,TILE_SIZE);
+    }
 }
 
 bool Board::isFocusable() {return false;}
 
-Piece::Piece(Menu *m, int x, int y, Type type, Side side) : _type(type), _side(side) {
+/*Piece::Piece(Menu *m, int x, int y, Type type, Side side) : _type(type), _side(side) {
     _m = m;
     _x = x;
     _y = y;
@@ -71,4 +82,4 @@ void Piece::draw() {
     }
 
     Sprite::draw();
-}
+}*/

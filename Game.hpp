@@ -13,13 +13,14 @@ class Game {
 
 public:
     Game();
+    GameData* getInfo();
+
     void update();
 
     bool checkLine(int x, int y, int dx, int dy);
     bool checkDiag(int x, int y, int dx, int dy);
     bool canMove(int x, int y, int dx, int dy);
-
-    GameData* getInfo();
+    void move(int x, int y, int dx, int dy);
 };
 
 
