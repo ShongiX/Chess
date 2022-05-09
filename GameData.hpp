@@ -8,6 +8,7 @@
 #include "Enums.hpp"
 
 class Game;
+class GameMenu;
 
 class GameData {
 public:
@@ -17,7 +18,10 @@ private:
     Type _boardType[BOARD_SIZE][BOARD_SIZE];
     Side _boardSide[BOARD_SIZE][BOARD_SIZE];
 
+    Side sideToMove = WHITE;
+
     friend Game;
+    friend GameMenu;
 };
 
 

@@ -17,4 +17,10 @@ void Widget::setFocus(bool focus) {
     _focus = focus;
 }
 
-
+Color Color::opacity(Color background, float alpha) {
+    return Color(
+            (1-alpha) * background.r + alpha * r,
+            (1-alpha) * background.g + alpha * g,
+            (1-alpha) * background.b + alpha * b
+    );
+}

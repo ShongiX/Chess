@@ -31,6 +31,8 @@ struct Color {
 
     bool operator==(Color c) const {return r == c.r && g == c.r && b == c.b;}
     bool operator!=(Color c) const {return r != c.r || g != c.r || b != c.b;}
+
+    Color opacity(Color background, float alpha);
 };
 
 #endif //SAKK_WIDGET_HPP

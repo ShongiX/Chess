@@ -57,3 +57,18 @@ void Piece::handle(const genv::event &ev) {
 bool Piece::isFocusable() {
     return true;
 }
+
+void Piece::draw() {
+    if (_focus) {
+        Color backgroundC;
+        if ((_x/_sx + _y/_sy )%2 == 0) backgroundC = Color(240,217,181);
+        else backgroundC = Color(181,136,99);
+
+        Color tileC(255,255,0);
+        tileC = tileC.opacity(backgroundC,0.4);
+
+        gout << move_to(_x,_y) << color(tileC.r,tileC.g,tileC.b) << box(_sx,_sy);
+    }
+
+    Sprite::draw();
+}

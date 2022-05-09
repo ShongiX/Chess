@@ -62,6 +62,8 @@ void System::run() {
 
                     _game->update();
                     loopCount = 0;
+
+                    _gameMenu->build();
                 }
             }
 
@@ -131,30 +133,6 @@ Menu *System::buildGameMenu() {
 
     new Board(_gameMenu,0,0,_XX,_YY);
 
-    /*int i = 0; Side s = BLACK;
-    new Piece(menu,0*Board::TILE_SIZE, i*Board::TILE_SIZE,ROOK, s);
-    new Piece(menu,1*Board::TILE_SIZE, i*Board::TILE_SIZE,BISHOP, s);
-    new Piece(menu,2*Board::TILE_SIZE, i*Board::TILE_SIZE,KNIGHT, s);
-    new Piece(menu,3*Board::TILE_SIZE, i*Board::TILE_SIZE,QUEEN, s);
-    new Piece(menu,4*Board::TILE_SIZE, i*Board::TILE_SIZE,KING, s);
-    new Piece(menu,5*Board::TILE_SIZE, i*Board::TILE_SIZE,KNIGHT, s);
-    new Piece(menu,6*Board::TILE_SIZE, i*Board::TILE_SIZE,BISHOP, s);
-    new Piece(menu,7*Board::TILE_SIZE, i*Board::TILE_SIZE,ROOK, s);
-
-    i = 7, s = WHITE;
-    new Piece(menu,0*Board::TILE_SIZE, i*Board::TILE_SIZE,ROOK, s);
-    new Piece(menu,1*Board::TILE_SIZE, i*Board::TILE_SIZE,BISHOP, s);
-    new Piece(menu,2*Board::TILE_SIZE, i*Board::TILE_SIZE,KNIGHT, s);
-    new Piece(menu,3*Board::TILE_SIZE, i*Board::TILE_SIZE,QUEEN, s);
-    new Piece(menu,4*Board::TILE_SIZE, i*Board::TILE_SIZE,KING, s);
-    new Piece(menu,5*Board::TILE_SIZE, i*Board::TILE_SIZE,KNIGHT, s);
-    new Piece(menu,6*Board::TILE_SIZE, i*Board::TILE_SIZE,BISHOP, s);
-    new Piece(menu,7*Board::TILE_SIZE, i*Board::TILE_SIZE,ROOK, s);
-
-    for (int j=0; j<8; j++) {
-        new Piece(menu,j*Board::TILE_SIZE, 1*Board::TILE_SIZE,PAWN, BLACK);
-        new Piece(menu,j*Board::TILE_SIZE, 6*Board::TILE_SIZE,PAWN, WHITE);
-    }*/
     return _gameMenu;
 }
 
