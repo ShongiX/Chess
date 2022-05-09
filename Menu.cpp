@@ -4,7 +4,6 @@
 
 #include <iostream>
 #include "Menu.hpp"
-#include "Sprite.hpp"
 
 using namespace genv;
 
@@ -36,4 +35,8 @@ void Menu::addWidget(Widget *w) {
 
 void Menu::resetFocus(int focus) {
     _widgets.at(focus)->setFocus(false);
+}
+
+void GameMenu::setInfo(GameData* gd) {
+    _gd = gd;
 }

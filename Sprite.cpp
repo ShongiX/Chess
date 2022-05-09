@@ -5,7 +5,7 @@
 #include "Sprite.hpp"
 #include <fstream>
 
-Pixel::Pixel(int xx, int yy, char rr, char gg, char bb) : x(xx), y(yy)  {
+Pixel::Pixel(int xx, int yy, int rr, int gg, int bb) : x(xx), y(yy)  {
     c = Color(rr,gg,bb);
 }
 
@@ -30,7 +30,9 @@ void Sprite::loadFromFile(const std::string& fileName) {
 
 void Sprite::draw() {
     for (Pixel &pixel : _pixels) {
-        genv::gout << genv::move_to(pixel.x + _x, pixel.y + _y) << genv::color(pixel.c.r, pixel.c.g, pixel.c.b) << genv::dot;
+        if (!(pixel.c.r == 255 && pixel.c.g == 0 && pixel.c.b == 255)) {
+            genv::gout << genv::move_to(pixel.x + _x, pixel.y + _y) << genv::color(pixel.c.r, pixel.c.g, pixel.c.b) << genv::dot;
+        }
     }
 }
 

@@ -5,7 +5,10 @@
 #ifndef SAKK_MENU_H
 #define SAKK_MENU_H
 
-#include "Sprite.hpp"
+#include <vector>
+#include "Widget.hpp"
+
+class GameData;
 
 class Menu {
 protected:
@@ -17,6 +20,12 @@ public:
 
     void addWidget(Widget *w);
     void resetFocus(int focus);
+};
+
+class GameMenu : public Menu {
+    GameData* _gd{};
+public:
+    void setInfo(GameData* gd);
 };
 
 

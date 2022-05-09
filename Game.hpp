@@ -5,23 +5,17 @@
 #ifndef SAKK_GAME_HPP
 #define SAKK_GAME_HPP
 
-
 #include <vector>
-#include "Tile.hpp"
-
-const int BOARD_SIZE = 8;
-
-class GameData {
-    std::vector<std::vector<Tile>> _board;
-
-    friend Game;
-};
+#include "GameData.hpp"
 
 class Game {
     GameData* _gd{};
 
 public:
     Game();
+    void update();
+
+    GameData* getInfo();
 };
 
 

@@ -10,9 +10,11 @@
 struct Pixel;
 
 class Sprite : public Widget {
+protected:
     std::vector<Pixel> _pixels;
 
 public:
+    Sprite() = default;
     Sprite(Menu* m,int x,int y,const std::string& fileName);
 
     void loadFromFile(const std::string& fileName);
@@ -21,14 +23,14 @@ public:
 };
 
 struct Pixel {
-private:
+public:
     int x,y;
     Color c = Color(0,0,0);
 
     friend class Sprite;
 
 public:
-    Pixel(int xx,int yy,char rr,char gg,char bb);
+    Pixel(int xx,int yy,int rr,int gg,int bb);
 };
 
 

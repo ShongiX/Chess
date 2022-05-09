@@ -25,9 +25,12 @@ public:
 };
 
 struct Color {
-    unsigned char r{},g{},b{};
+    int r{},g{},b{};
     Color() = default;
     Color(int rr, int gg, int bb) : r(rr), g(gg), b(bb) {}
+
+    bool operator==(Color c) const {return r == c.r && g == c.r && b == c.b;}
+    bool operator!=(Color c) const {return r != c.r || g != c.r || b != c.b;}
 };
 
 #endif //SAKK_WIDGET_HPP

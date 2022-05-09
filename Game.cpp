@@ -3,56 +3,52 @@
 //
 
 #include "Game.hpp"
-#include "Piece.h"
 
 Game::Game() {
     _gd = new GameData();
 
-    for (int i = 0; i < BOARD_SIZE; ++i) {
-        std::vector<Tile> line;
-        for (int j = 0; j < BOARD_SIZE; ++j) {
-            line.emplace_back();
+    for (int i = 0; i < GameData::BOARD_SIZE; ++i) {
+        for (int j = 0; j < GameData::BOARD_SIZE; ++j) {
+            _gd->_boardType[i][j] = NONE;
+            _gd->_boardSide[i][j] = EITHER;
         }
-        _gd->_board.push_back(line);
     }
 
-    int i = 0;
-    _gd->_board[i][0].piece = new Rook(Side::BLACK);
-    _gd->_board[i][1].piece = new Knight(Side::BLACK);
-    _gd->_board[i][2].piece = new Bishop(Side::BLACK);
-    _gd->_board[i][3].piece = new Queen(Side::BLACK);
-    _gd->_board[i][4].piece = new King(Side::BLACK);
-    _gd->_board[i][5].piece = new Bishop(Side::BLACK);
-    _gd->_board[i][6].piece = new Knight(Side::BLACK);
-    _gd->_board[i][7].piece = new Rook(Side::BLACK);
+    for (int i=0; i<GameData::BOARD_SIZE; ++i) {
+        _gd->_boardSide[i][0] = BLACK;
+        _gd->_boardSide[i][1] = BLACK;
+        _gd->_boardSide[i][6] = WHITE;
+        _gd->_boardSide[i][7] = WHITE;
+    }
 
-    i = 1;
-    _gd->_board[i][0].piece = new Pawn(Side::BLACK);
-    _gd->_board[i][1].piece = new Pawn(Side::BLACK);
-    _gd->_board[i][2].piece = new Pawn(Side::BLACK);
-    _gd->_board[i][3].piece = new Pawn(Side::BLACK);
-    _gd->_board[i][4].piece = new Pawn(Side::BLACK);
-    _gd->_board[i][5].piece = new Pawn(Side::BLACK);
-    _gd->_board[i][6].piece = new Pawn(Side::BLACK);
-    _gd->_board[i][7].piece = new Pawn(Side::BLACK);
-
-    i = 6;
-    _gd->_board[i][0].piece = new Pawn(Side::WHITE);
-    _gd->_board[i][1].piece = new Pawn(Side::WHITE);
-    _gd->_board[i][2].piece = new Pawn(Side::WHITE);
-    _gd->_board[i][3].piece = new Pawn(Side::WHITE);
-    _gd->_board[i][4].piece = new Pawn(Side::WHITE);
-    _gd->_board[i][5].piece = new Pawn(Side::WHITE);
-    _gd->_board[i][6].piece = new Pawn(Side::WHITE);
-    _gd->_board[i][7].piece = new Pawn(Side::WHITE);
+    int i=0;
+    _gd->_boardType[0][i] = ROOK;
+    _gd->_boardType[1][i] = BISHOP;
+    _gd->_boardType[2][i] = KNIGHT;
+    _gd->_boardType[3][i] = QUEEN;
+    _gd->_boardType[4][i] = KING;
+    _gd->_boardType[5][i] = KNIGHT;
+    _gd->_boardType[6][i] = BISHOP;
+    _gd->_boardType[7][i] = ROOK;
 
     i = 7;
-    _gd->_board[i][0].piece = new Rook(Side::WHITE);
-    _gd->_board[i][1].piece = new Knight(Side::WHITE);
-    _gd->_board[i][2].piece = new Bishop(Side::WHITE);
-    _gd->_board[i][3].piece = new Queen(Side::WHITE);
-    _gd->_board[i][4].piece = new King(Side::WHITE);
-    _gd->_board[i][5].piece = new Bishop(Side::WHITE);
-    _gd->_board[i][6].piece = new Knight(Side::WHITE);
-    _gd->_board[i][7].piece = new Rook(Side::WHITE);
+    _gd->_boardType[0][i] = ROOK;
+    _gd->_boardType[1][i] = BISHOP;
+    _gd->_boardType[2][i] = KNIGHT;
+    _gd->_boardType[3][i] = QUEEN;
+    _gd->_boardType[4][i] = KING;
+    _gd->_boardType[5][i] = KNIGHT;
+    _gd->_boardType[6][i] = BISHOP;
+    _gd->_boardType[7][i] = ROOK;
+
+    for (int j=0; j<8; j++) {
+        _gd->_boardType[j][1] = PAWN;
+        _gd->_boardType[j][6] = PAWN;
+    }
+}
+
+void Game::update() {}
+
+GameData *Game::getInfo() {
+    return _gd;
 }

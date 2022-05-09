@@ -8,11 +8,17 @@
 #include <map>
 #include "graphics.hpp"
 
-enum State {NONE, MAIN, PLAY, RULES, INFO, CREDITS};
+enum State {MAIN, PLAY, RULES, INFO, CREDITS};
 
+class Game;
 class Menu;
+class GameMenu;
+class Controller;
 
 class System {
+    Game* _game{};
+    Controller* _controller{};
+
     const int _XX = 800;
     const int _YY = 800;
 
@@ -22,7 +28,8 @@ class System {
     genv::event _ev;
     int _focus = -1;
 
-    Menu* _activeMenu = nullptr;
+    Menu* _activeMenu{};
+    GameMenu* _gameMenu{};
     std::map<State, Menu*> _menus;
     State _state = MAIN;
 
@@ -37,6 +44,7 @@ class System {
 
 public:
     System(int XX, int YY, int FPS);
+    void init();
     void run();
 };
 

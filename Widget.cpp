@@ -16,3 +16,5 @@ bool Widget::isFocus(const genv::event &ev) const {
 void Widget::setFocus(bool focus) {
     _focus = focus;
 }
+
+
