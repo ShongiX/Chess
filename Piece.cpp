@@ -8,6 +8,9 @@
 
 using namespace genv;
 
+int Board::_activeTileX = -1;
+int Board::_activeTileY = -1;
+
 Board::Board(Menu *m, int x, int y, int sx, int sy) : Widget(m,x,y,sx,sy) {}
 
 void Board::draw() {

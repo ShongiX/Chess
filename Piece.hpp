@@ -13,6 +13,10 @@ class Board : public Widget {
 public:
     static int _activeTileX;
     static int _activeTileY;
+
+    static std::vector<int> _underAttackX;
+    static std::vector<int> _underAttackY;
+
     static const int TILE_SIZE = 100;
 
     Board(Menu* m,int x, int y, int sx, int sy);

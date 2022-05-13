@@ -25,22 +25,22 @@ Game::Game() {
 
     int i=0;
     _gd->_boardType[0][i] = ROOK;
-    _gd->_boardType[1][i] = BISHOP;
-    _gd->_boardType[2][i] = KNIGHT;
+    _gd->_boardType[1][i] = KNIGHT;
+    _gd->_boardType[2][i] = BISHOP;
     _gd->_boardType[3][i] = QUEEN;
     _gd->_boardType[4][i] = KING;
-    _gd->_boardType[5][i] = KNIGHT;
-    _gd->_boardType[6][i] = BISHOP;
+    _gd->_boardType[5][i] = BISHOP;
+    _gd->_boardType[6][i] = KNIGHT;
     _gd->_boardType[7][i] = ROOK;
 
     i = 7;
     _gd->_boardType[0][i] = ROOK;
-    _gd->_boardType[1][i] = BISHOP;
-    _gd->_boardType[2][i] = KNIGHT;
+    _gd->_boardType[1][i] = KNIGHT;
+    _gd->_boardType[2][i] = BISHOP;
     _gd->_boardType[3][i] = QUEEN;
     _gd->_boardType[4][i] = KING;
-    _gd->_boardType[5][i] = KNIGHT;
-    _gd->_boardType[6][i] = BISHOP;
+    _gd->_boardType[5][i] = BISHOP;
+    _gd->_boardType[6][i] = KNIGHT;
     _gd->_boardType[7][i] = ROOK;
 
     for (int j=0; j<GameData::BOARD_SIZE; j++) {
@@ -97,8 +97,10 @@ bool Game::canMove(int x, int y, int dx, int dy) {
     Type t = _gd->_boardType[x][y];
     Side s = _gd->_boardSide[x][y];
 
-    std::cout << s << " " << t << " ";
-    printf("Attempted move from %d,%d to %d,%d\n",x,y,dx,dy);
+    //std::cout << s << " " << t << " ";
+    //printf("Attempted move from %d,%d to %d,%d\n",x,y,dx,dy);
+
+    //FIXME: doesn't check whether piece is pinned
 
     if (_gd->_boardSide[dx][dy] == s) return false;
     else {
@@ -143,6 +145,29 @@ void Game::move(int x, int y, int dx, int dy) {
     //change turn
     if (_gd->_sideToMove == WHITE) _gd->_sideToMove = BLACK;
     else _gd->_sideToMove = WHITE;
+}
+
+bool Game::check() {
+    int dx, dy;
+    for (int i=0; i<GameData::BOARD_SIZE; ++i) {
+        for (int j = 0; j < GameData::BOARD_SIZE; ++j) {
+            if (_gd->_boardType[i][j] == KING && _gd->_boardSide[i][j] != _gd->_sideToMove) { //enemy king
+                dx = i;
+                dy = j;
+                break;
+            }
+        }
+    }
+
+    for (int i=0; i<GameData::BOARD_SIZE; ++i) {
+        for (int j = 0; j < GameData::BOARD_SIZE; ++j) {
+            if (_gd->_boardSide[i][j] == _gd->_sideToMove) {
+                if (canMove(i,j,dx,dy)) return true;
+            }
+        }
+    }
+
+    return false;
 }
 
 

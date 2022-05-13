@@ -21,6 +21,7 @@ public:
     bool checkDiag(int x, int y, int dx, int dy);
     bool canMove(int x, int y, int dx, int dy);
     void move(int x, int y, int dx, int dy);
+    bool check();
 };
 
 
