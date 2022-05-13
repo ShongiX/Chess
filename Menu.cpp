@@ -10,8 +10,8 @@
 
 using namespace genv;
 
-std::vector<int> _underAttackX = std::vector<int>();
-std::vector<int> _underAttackY = std::vector<int>();
+std::vector<int> Board::_underAttackX = std::vector<int>();
+std::vector<int> Board::_underAttackY = std::vector<int>();
 
 void Menu::draw(int focus) {
     for (Widget* widget : _widgets) widget->draw();
@@ -52,6 +52,8 @@ void GameMenu::handle(const event &ev, int &focus) {
             if (_gd->_boardSide[x][y] == _gd->_sideToMove) { //switching piece
                 Board::_activeTileX = x;
                 Board::_activeTileY = y;
+
+                searchAttackedTiles();
             } else if (Board::_activeTileX != -1) { //attempting to move
                  if (Controller::askIfCanMove(Board::_activeTileX,Board::_activeTileY,x,y)) {
                      Controller::move(Board::_activeTileX,Board::_activeTileY,x,y);
@@ -103,10 +105,10 @@ void GameMenu::setInfo(GameData* gd) {
 }
 
 void GameMenu::searchAttackedTiles() {
-    //Board::_underAttackX.clear();
-    //Board::_underAttackY.clear();
+    Board::_underAttackX.clear();
+    Board::_underAttackY.clear();
 
-    /*for (int i = 0; i < GameData::BOARD_SIZE; ++i) {
+    for (int i = 0; i < GameData::BOARD_SIZE; ++i) {
         for (int j = 0; j < GameData::BOARD_SIZE; ++j) {
             if (_gd->_boardSide[i][j] == _gd->_sideToMove) continue;
             if (Controller::askIfCanMove(Board::_activeTileX,Board::_activeTileY,i,j)) {
@@ -114,7 +116,5 @@ void GameMenu::searchAttackedTiles() {
                 Board::_underAttackY.push_back(j);
             }
         }
-    }*/
-
-    for (int i = 0; i < GameData::BOARD_SIZE; ++i) {std::cout << i << std::endl;}
+    }
 }

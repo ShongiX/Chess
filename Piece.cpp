@@ -24,6 +24,7 @@ void Board::draw() {
     }
 
     if (_activeTileX != -1) {
+        //Selected piece
         Color backgroundC;
         if ((_x/_sx + _y/_sy )%2 == 0) backgroundC = Color(240,217,181);
         else backgroundC = Color(181,136,99);
@@ -32,6 +33,17 @@ void Board::draw() {
         tileC = tileC.opacity(backgroundC,0.4);
 
         gout << move_to(_activeTileX*TILE_SIZE,_activeTileY*TILE_SIZE) << color(tileC.r,tileC.g,tileC.b) << box(TILE_SIZE,TILE_SIZE);
+
+        //Attacked tiles
+        for (unsigned i = 0; i < _underAttackX.size(); ++i) {
+            if ((_underAttackX[i]+_underAttackY[i])%2 == 0) backgroundC = Color(240,217,181);
+            else backgroundC = Color(181,136,99);
+
+            Color attackedC(255,0,0);
+            attackedC = attackedC.opacity(backgroundC,0.4);
+
+            gout << move_to(_underAttackX[i]*TILE_SIZE,_underAttackY[i]*TILE_SIZE) << color(attackedC.r,attackedC.g,attackedC.b) << box(TILE_SIZE,TILE_SIZE);
+        }
     }
 }
 
