@@ -8,6 +8,9 @@
 
 using namespace genv;
 
+int Board::_activeTileX = -1;
+int Board::_activeTileY = -1;
+
 Board::Board(Menu *m, int x, int y, int sx, int sy) : Widget(m,x,y,sx,sy) {}
 
 void Board::draw() {
@@ -19,11 +22,34 @@ void Board::draw() {
             }
         }
     }
+
+    if (_activeTileX != -1) {
+        //Selected piece
+        Color backgroundC;
+        if ((_x/_sx + _y/_sy )%2 == 0) backgroundC = Color(240,217,181);
+        else backgroundC = Color(181,136,99);
+
+        Color tileC(255,255,0);
+        tileC = tileC.opacity(backgroundC,0.4);
+
+        gout << move_to(_activeTileX*TILE_SIZE,_activeTileY*TILE_SIZE) << color(tileC.r,tileC.g,tileC.b) << box(TILE_SIZE,TILE_SIZE);
+
+        //Attacked tiles
+        for (unsigned i = 0; i < _underAttackX.size(); ++i) {
+            if ((_underAttackX[i]+_underAttackY[i])%2 == 0) backgroundC = Color(240,217,181);
+            else backgroundC = Color(181,136,99);
+
+            Color attackedC(255,0,0);
+            attackedC = attackedC.opacity(backgroundC,0.4);
+
+            gout << move_to(_underAttackX[i]*TILE_SIZE,_underAttackY[i]*TILE_SIZE) << color(attackedC.r,attackedC.g,attackedC.b) << box(TILE_SIZE,TILE_SIZE);
+        }
+    }
 }
 
 bool Board::isFocusable() {return false;}
 
-Piece::Piece(Menu *m, int x, int y, Type type, Side side) : _type(type), _side(side) {
+/*Piece::Piece(Menu *m, int x, int y, Type type, Side side) : _type(type), _side(side) {
     _m = m;
     _x = x;
     _y = y;
@@ -71,4 +97,4 @@ void Piece::draw() {
     }
 
     Sprite::draw();
-}
+}*/

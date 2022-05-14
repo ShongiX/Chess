@@ -9,6 +9,7 @@
 
 class Game;
 class GameMenu;
+class Board;
 
 class GameData {
 public:
@@ -18,10 +19,15 @@ private:
     Type _boardType[BOARD_SIZE][BOARD_SIZE];
     Side _boardSide[BOARD_SIZE][BOARD_SIZE];
 
-    Side sideToMove = WHITE;
+    Side _sideToMove = WHITE;
+
+    bool _checkWhite = false;
+    bool _checkBlack = false;
+    bool _gameOver = false;
 
     friend Game;
     friend GameMenu;
+    friend Board;
 };
 
 

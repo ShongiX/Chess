@@ -5,6 +5,7 @@
 #include "Button.hpp"
 
 #include <utility>
+#include <iostream>
 
 using namespace genv;
 
@@ -16,8 +17,6 @@ Button::Button(Menu* m,int x, int y, int sx, int sy, std::string name, std::func
 }
 
 void Button::handle(const genv::event& ev) {
-    int ex = ev.pos_x;
-    int ey = ev.pos_y;
 
     if (ev.button == btn_left) {
         pressed = true;
@@ -25,31 +24,46 @@ void Button::handle(const genv::event& ev) {
         pressed = false;
     }
 
-    if (ex > _x && ex < _x+_sx && ey > _y && ey < _y+_sy && _state == ButtonState::NEUTRAL) _state = ButtonState::HOVER;
-    if ( !(ex > _x && ex < _x+_sx && ey > _y && ey < _y+_sy) && _state == ButtonState::HOVER) _state = ButtonState::NEUTRAL;
-    if (ex > _x && ex < _x+_sx && ey > _y && ey < _y+_sy && pressed) _state = ButtonState::CLICKED;
-    if (_state == ButtonState::CLICKED && !pressed) {
-        if (ex > _x && ex < _x+_sx && ey > _y && ey < _y+_sy) {
+    if (hover(ev) && _state == NEUTRAL) _state = HOVER;
+    if (!hover(ev) && _state == HOVER) _state = NEUTRAL;
+    if (hover(ev) && pressed) _state = CLICKED;
+    if (_state == CLICKED && !pressed) {
+        if (hover(ev)) {
             _func();
         }
-        _state = ButtonState::NEUTRAL;
+        _state = NEUTRAL;
     }
+
+    //std::cout << "State: " << (int)_state << std::endl;
 }
 
 void Button::draw() {
     Color bc; //Box Color
     Color oc; //Outline Color
 
-    if (_state == ButtonState::NEUTRAL) {
+    if (_state == NEUTRAL) {
         bc = Color(100,100,100);
         oc = Color(255,255,255);
-    } else if (_state == ButtonState::HOVER) {
+    } else if (_state == HOVER) {
         bc = Color(150,150,150);
         oc = Color(255,255,255);
     } else {
         bc = Color(150,150,150);
         oc = Color(0,0,0);
     }
+
+    /*if (_focus) {
+        if (pressed) {
+            bc = Color(150,150,150);
+            oc = Color(0,0,0);
+        } else {
+            bc = Color(150,150,150);
+            oc = Color(255,255,255);
+        }
+    } else {
+        bc = Color(100,100,100);
+        oc = Color(255,255,255);
+    }*/
 
     //Box
     gout << color(bc.r,bc.g,bc.b) << move_to(_x,_y) << box(_sx,_sy);
@@ -70,8 +84,10 @@ bool Button::isFocus(const genv::event &ev) const {
     return ev.type == genv::ev_mouse && ev.pos_x > _x && ev.pos_x < _x + _sx && ev.pos_y > _y && ev.pos_y < _y + _sy;
 }
 
-const std::string &Button::getName() const {
-    return _name;
-}
+bool Button::hover(const genv::event &ev) const {
+    int ex = ev.pos_x;
+    int ey = ev.pos_y;
 
+    return ex >= _x && ey >= _y && ex <= _x + _sx && ey <= _y + _sy;
+}
 

@@ -10,16 +10,21 @@ class GameMenu;
 class GameData;
 
 class Controller {
-    Game* _game{};
-    GameMenu* _gameMenu{};
-
-    GameData* _gd{};
+    static Game* _game;
+    static GameMenu* _gameMenu;
+    static GameData* _gd;
 
 public:
-    Controller(Game* game, GameMenu* gameMenu);
+    Controller();
 
-    void getInfo();
-    void sendInfo();
+    static void init(Game* game, GameMenu* gameMenu);
+
+    static void getInfo();
+    static void sendInfo();
+
+    static bool askIfCanMove(int x, int y, int dx, int dy);
+    static void move(int x, int y, int dx, int dy);
+    static void unmove();
 };
 
 

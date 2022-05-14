@@ -8,12 +8,12 @@
 #include "Widget.hpp"
 #include <functional>
 
-enum class ButtonState {NEUTRAL, HOVER, CLICKED};
+enum ButtonState {NEUTRAL, HOVER, CLICKED};
 
 class Button : public Widget {
     std::string _name;
     std::function<void()> _func = std::function<void()>();
-    ButtonState _state = ButtonState::NEUTRAL;
+    ButtonState _state = NEUTRAL;
 public:
     Button(Menu* m,int x, int y, int sx, int sy, std::string name,std::function<void()> func);
 
@@ -22,7 +22,7 @@ public:
     bool isFocusable() override;
     bool isFocus(const genv::event &ev) const override;
 
-    const std::string &getName() const;
+    bool hover(const genv::event &ev) const;
 
     bool pressed = false;
 };

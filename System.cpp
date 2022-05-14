@@ -2,6 +2,7 @@
 // Created by laccs on 5/6/2022.
 //
 
+#include <iostream>
 #include "System.hpp"
 #include "Menu.hpp"
 #include "Button.hpp"
@@ -29,11 +30,14 @@ System::System(int XX, int YY, int FPS) : _XX(XX), _YY(YY), _FPS(FPS) {
 
 void System::init() {
     _game = new Game();
-    _controller = new Controller(_game,_gameMenu);
+    Controller::init(_game,_gameMenu);
+    Controller::getInfo();
+    Controller::sendInfo();
+    _gameMenu->build();
 
     //controller = new Controller(game, gameMenu);
     //game->setFunc([&](){ changeState(DEAD); });
-    //gameMenu->setController(controller);
+
 }
 
 void System::run() {
@@ -57,8 +61,8 @@ void System::run() {
                 loopCount++;
                 if (loopCount >= _REFRESH && _game) {
 
-                    _controller->getInfo();
-                    _controller->sendInfo();
+                    Controller::getInfo();
+                    Controller::sendInfo();
 
                     _game->update();
                     loopCount = 0;

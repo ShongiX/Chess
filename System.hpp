@@ -17,7 +17,6 @@ class Controller;
 
 class System {
     Game* _game{};
-    Controller* _controller{};
 
     const int _XX = 800;
     const int _YY = 800;

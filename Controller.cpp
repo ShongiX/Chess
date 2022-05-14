@@ -6,7 +6,15 @@
 #include "Game.hpp"
 #include "Menu.hpp"
 
-Controller::Controller(Game *game, GameMenu *gameMenu) : _game(game), _gameMenu(gameMenu) {
+Game* Controller::_game{};
+GameMenu* Controller::_gameMenu{};
+GameData* Controller::_gd{};
+
+Controller::Controller() = default;
+
+void Controller::init(Game* game, GameMenu* gameMenu) {
+    _game = game;
+    _gameMenu = gameMenu;
     _gd = _game->getInfo();
 }
 
@@ -16,4 +24,17 @@ void Controller::getInfo() {
 
 void Controller::sendInfo() {
     _gameMenu->setInfo(_gd);
+}
+
+bool Controller::askIfCanMove(int x, int y, int dx, int dy) {
+    //return _game->canMove(*_gd,x,y,dx,dy);
+    return _game->overallCheck(x,y,dx,dy);
+}
+
+void Controller::move(int x, int y, int dx, int dy) {
+    _game->move(x,y,dx,dy);
+}
+
+void Controller::unmove() {
+    _game->unmove();
 }
