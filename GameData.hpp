@@ -20,7 +20,8 @@ private:
     Side _boardSide[BOARD_SIZE][BOARD_SIZE];
 
     Side _sideToMove = WHITE;
-    bool _check = false;
+    bool _checkWhite = false;
+    bool _checkBlack = false;
 
     friend Game;
     friend GameMenu;

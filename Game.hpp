@@ -17,11 +17,16 @@ public:
 
     void update();
 
-    bool checkLine(int x, int y, int dx, int dy);
-    bool checkDiag(int x, int y, int dx, int dy);
-    bool canMove(int x, int y, int dx, int dy);
+    bool checkLine(GameData gd, int x, int y, int dx, int dy);
+    bool checkDiag(GameData gd, int x, int y, int dx, int dy);
+    bool canMove(GameData gd, int x, int y, int dx, int dy);
+    //bool isPinned(GameData gd, int x, int y, int dx, int dy);
+    bool isAttacked(GameData gd, int dx, int dy);
     void move(int x, int y, int dx, int dy);
-    bool check();
+    void move(GameData gd, int x, int y, int dx, int dy);
+    Side check(GameData gd);
+
+    bool overallCheck(GameData gd, int x, int y, int dx, int dy);
 };
 
 

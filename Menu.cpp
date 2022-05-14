@@ -50,10 +50,15 @@ void GameMenu::handle(const event &ev, int &focus) {
 
         if (ev.button == btn_left) {
             if (_gd->_boardSide[x][y] == _gd->_sideToMove) { //switching piece
-                Board::_activeTileX = x;
-                Board::_activeTileY = y;
+                if (Board::_activeTileX == x && Board::_activeTileY == y) {
+                    Board::_activeTileX = -1;
+                    Board::_activeTileY = -1;
+                } else {
+                    Board::_activeTileX = x;
+                    Board::_activeTileY = y;
 
-                searchAttackedTiles();
+                    searchAttackedTiles();
+                }
             } else if (Board::_activeTileX != -1) { //attempting to move
                  if (Controller::askIfCanMove(Board::_activeTileX,Board::_activeTileY,x,y)) {
                      Controller::move(Board::_activeTileX,Board::_activeTileY,x,y);
