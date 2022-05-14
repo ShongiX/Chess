@@ -24,6 +24,7 @@ public:
 
     static bool askIfCanMove(int x, int y, int dx, int dy);
     static void move(int x, int y, int dx, int dy);
+    static void unmove();
 };
 
 

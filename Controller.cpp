@@ -28,9 +28,13 @@ void Controller::sendInfo() {
 
 bool Controller::askIfCanMove(int x, int y, int dx, int dy) {
     //return _game->canMove(*_gd,x,y,dx,dy);
-    return _game->overallCheck(*_gd,x,y,dx,dy);
+    return _game->overallCheck(x,y,dx,dy);
 }
 
 void Controller::move(int x, int y, int dx, int dy) {
     _game->move(x,y,dx,dy);
+}
+
+void Controller::unmove() {
+    _game->unmove();
 }

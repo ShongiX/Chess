@@ -8,25 +8,35 @@
 #include <vector>
 #include "GameData.hpp"
 
+struct Move {
+    int x{}, y{};
+    int dx{}, dy{};
+
+    Side s, ds;
+    Type t, dt;
+
+    bool saved = false;
+};
+
 class Game {
     GameData* _gd{};
 
+    Move lastMove;
+
+    bool checkLine(int x, int y, int dx, int dy);
+    bool checkDiag(int x, int y, int dx, int dy);
+    bool canMove(int x, int y, int dx, int dy);
+    void check();
+    bool isAttacked(int dx, int dy, Side attackedBy);
+    void saveMove(int x, int y, int dx, int dy);
 public:
     Game();
     GameData* getInfo();
-
     void update();
 
-    bool checkLine(GameData gd, int x, int y, int dx, int dy);
-    bool checkDiag(GameData gd, int x, int y, int dx, int dy);
-    bool canMove(GameData gd, int x, int y, int dx, int dy);
-    //bool isPinned(GameData gd, int x, int y, int dx, int dy);
-    bool isAttacked(GameData gd, int dx, int dy);
     void move(int x, int y, int dx, int dy);
-    void move(GameData gd, int x, int y, int dx, int dy);
-    Side check(GameData gd);
-
-    bool overallCheck(GameData gd, int x, int y, int dx, int dy);
+    void unmove();
+    bool overallCheck(int x, int y, int dx, int dy);
 };
 
 

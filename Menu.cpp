@@ -67,7 +67,10 @@ void GameMenu::handle(const event &ev, int &focus) {
                  }
             }
         }
-
+    } else if (ev.type == ev_key) {
+        if (ev.keycode == key_left) {
+            Controller::unmove();
+        }
     }
 }
 

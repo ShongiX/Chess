@@ -5,7 +5,6 @@
 #include "Game.hpp"
 #include "Piece.hpp"
 #include <cstdlib>
-#include <iostream>
 
 Game::Game() {
     _gd = new GameData();
@@ -56,26 +55,26 @@ GameData *Game::getInfo() {
 
 void Game::update() {}
 
-bool Game::checkLine(GameData gd, int x, int y, int dx, int dy) {
+bool Game::checkLine(int x, int y, int dx, int dy) {
     if (x == dx) {
         if (y - dy > 0) {
-            for (int i = y-1; i != dy; i--) if(gd._boardType[dx][i] != NONE) return false;
+            for (int i = y-1; i != dy; i--) if(_gd->_boardType[dx][i] != NONE) return false;
         } else {
-            for (int i = y+1; i != dy; i++) if(gd._boardType[dx][i] != NONE) return false;
+            for (int i = y+1; i != dy; i++) if(_gd->_boardType[dx][i] != NONE) return false;
         }
     }
     else if (y == dy) {
         if (x - dx > 0) {
-            for (int i = x-1; i != dx; i--) if(gd._boardType[i][dy] != NONE) return false;
+            for (int i = x-1; i != dx; i--) if(_gd->_boardType[i][dy] != NONE) return false;
         } else {
-            for (int i = x+1; i != dx; i++) if(gd._boardType[i][dy] != NONE) return false;
+            for (int i = x+1; i != dx; i++) if(_gd->_boardType[i][dy] != NONE) return false;
         }
     }
 
     return true;
 }
 
-bool Game::checkDiag(GameData gd, int x, int y, int dx, int dy) {
+bool Game::checkDiag(int x, int y, int dx, int dy) {
     int k,l;
     if (x-dx > 0) k = -1;
     else k = 1;
@@ -85,7 +84,7 @@ bool Game::checkDiag(GameData gd, int x, int y, int dx, int dy) {
 
     for (int i = x+k; i != dx;) {
         for (int j = y+l; j != dy ;) {
-            if (gd._boardType[i][j] != NONE) return false;
+            if (_gd->_boardType[i][j] != NONE) return false;
 
             i+=k;
             j+=l;
@@ -94,50 +93,33 @@ bool Game::checkDiag(GameData gd, int x, int y, int dx, int dy) {
     return true;
 }
 
-bool Game::overallCheck(GameData gd, int x, int y, int dx, int dy) {
-    if (!canMove(gd,x,y,dx,dy)) return false;
+bool Game::canMove(int x, int y, int dx, int dy) {
+    Type t = _gd->_boardType[x][y];
+    Side s = _gd->_boardSide[x][y];
 
-    move(gd,x,y,dx,dy);
-    Side checked = check(gd);
-
-
-    if (checked == gd._sideToMove) return false;
-
-    return true;
-}
-
-bool Game::canMove(GameData gd, int x, int y, int dx, int dy) {
-    Type t = gd._boardType[x][y];
-    Side s = gd._boardSide[x][y];
-
-    //std::cout << s << " " << t << " ";
-    //printf("Attempted move from %d,%d to %d,%d\n",x,y,dx,dy);
-
-    //FIXME: doesn't check whether piece is pinned
-
-    if (gd._boardSide[dx][dy] == s) return false;
+    if (_gd->_boardSide[dx][dy] == s) return false;
     else {
         if (t == QUEEN) {
-            if (x == dx || y == dy) return checkLine(*_gd,x,y,dx,dy);
-            if (abs(x-dx) == abs(y-dy)) return checkDiag(*_gd,x,y,dx,dy);
+            if (x == dx || y == dy) return checkLine(x,y,dx,dy);
+            if (abs(x-dx) == abs(y-dy)) return checkDiag(x,y,dx,dy);
         } else if (t == ROOK) {
             if (x != dx && y != dy) return false;
-            return checkLine(*_gd,x,y,dx,dy);
+            return checkLine(x,y,dx,dy);
         } else if (t == KNIGHT) {
             if ((x - dx) * (x - dx) + (y - dy) * (y - dy) == 5) return true;
         } else if (t == BISHOP) {
             if (abs(x-dx) != abs(y-dy)) return false;
-            return checkDiag(*_gd,x,y,dx,dy);
+            return checkDiag(x,y,dx,dy);
         } else if (t == PAWN) {
             if (s == WHITE) {
-                if (x == dx && dy-y == -1 && gd._boardType[dx][dy] == NONE) return true; //if one forward, no piece at destination
-                if (x == dx && dy-y == -2 && y == 6 && gd._boardType[dx][y-1] == NONE && gd._boardType[dx][dy] == NONE) return true; //if two forward, initial place and no piece at destination
-                if (abs(x-dx) == 1 && dy-y == -1 && gd._boardType[dx][dy] != NONE) return true; //if one diagonal, piece taken
+                if (x == dx && dy-y == -1 && _gd->_boardType[dx][dy] == NONE) return true; //if one forward, no piece at destination
+                if (x == dx && dy-y == -2 && y == 6 && _gd->_boardType[dx][y-1] == NONE && _gd->_boardType[dx][dy] == NONE) return true; //if two forward, initial place and no piece at destination
+                if (abs(x-dx) == 1 && dy-y == -1 && _gd->_boardType[dx][dy] != NONE) return true; //if one diagonal, piece taken
                 return false;
             } else {
-                if (x == dx && dy-y == 1 && gd._boardType[dx][dy] == NONE) return true; //if one forward, no piece at destination
-                if (x == dx && dy-y == 2 && y == 1 && gd._boardType[dx][y+1] == NONE && gd._boardType[dx][dy] == NONE) return true; //if two forward, initial place and no piece at destination
-                if (abs(x-dx) == 1 && dy-y == 1 && gd._boardType[dx][dy] != NONE) return true; //if one diagonal, piece taken
+                if (x == dx && dy-y == 1 && _gd->_boardType[dx][dy] == NONE) return true; //if one forward, no piece at destination
+                if (x == dx && dy-y == 2 && y == 1 && _gd->_boardType[dx][y+1] == NONE && _gd->_boardType[dx][dy] == NONE) return true; //if two forward, initial place and no piece at destination
+                if (abs(x-dx) == 1 && dy-y == 1 && _gd->_boardType[dx][dy] != NONE) return true; //if one diagonal, piece taken
                 return false;
             }
         } else { //KING
@@ -147,68 +129,14 @@ bool Game::canMove(GameData gd, int x, int y, int dx, int dy) {
     return false;
 }
 
-//FIXME: Not working
-/*bool Game::isPinned(GameData gd, int x, int y, int dx, int dy) {
-    gd._boardType[dx][dy] = gd._boardType[x][y];
-    gd._boardSide[dx][dy] = gd._boardSide[x][y];
-
-    gd._boardType[x][y] = NONE;
-    gd._boardSide[x][y] = NEITHER;
-
-    //move(gd,x,y,dx,dy);
-    //return true;
-    return check(gd);
-}*/
-
-bool Game::isAttacked(GameData gd, int dx, int dy) {
-    for (int i=0; i<GameData::BOARD_SIZE; ++i) {
-        for (int j = 0; j < GameData::BOARD_SIZE; ++j) {
-            if (gd._boardSide[i][j] != gd._sideToMove && gd._boardSide[i][j] != NEITHER) {
-                if (canMove(gd,i,j,dx,dy)) return true;
-            }
-        }
-    }
-    return false;
-}
-
-void Game::move(int x, int y, int dx, int dy) {
-    _gd->_boardType[dx][dy] = _gd->_boardType[x][y];
-    _gd->_boardSide[dx][dy] = _gd->_boardSide[x][y];
-
-    _gd->_boardType[x][y] = NONE;
-    _gd->_boardSide[x][y] = NEITHER;
-
-    if (_gd->_sideToMove == WHITE) _gd->_sideToMove = BLACK;
-    else _gd->_sideToMove = WHITE;
-
-    Side checked = check(*_gd);
-    if (checked == WHITE) {
-        _gd->_checkWhite = true;
-    } else if (checked == BLACK) {
-        _gd->_checkBlack = true;
-    }
-}
-
-void Game::move(GameData gd, int x, int y, int dx, int dy) {
-    gd._boardType[dx][dy] = gd._boardType[x][y];
-    gd._boardSide[dx][dy] = gd._boardSide[x][y];
-
-    gd._boardType[x][y] = NONE;
-    gd._boardSide[x][y] = NEITHER;
-
-    //change turn
-    //if (gd._sideToMove == WHITE) gd._sideToMove = BLACK;
-    //else gd._sideToMove = WHITE;
-}
-
-Side Game::check(GameData gd) {
+void Game::check() {
     int wx,wy;
     int bx,by;
 
     for (int i=0; i<GameData::BOARD_SIZE; ++i) {
         for (int j = 0; j < GameData::BOARD_SIZE; ++j) {
-            if (gd._boardType[i][j] == KING) {
-                if (gd._boardSide[i][j] == WHITE) {
+            if (_gd->_boardType[i][j] == KING) {
+                if (_gd->_boardSide[i][j] == WHITE) {
                     wx = i;
                     wy = j;
                 } else {
@@ -219,15 +147,78 @@ Side Game::check(GameData gd) {
         }
     }
 
-    if (isAttacked(gd,wx,wy)) {
-        std::cout << "Feher sakkban van\n";
-        return WHITE;
-    } else if (isAttacked(gd,bx,by)) {
-        std::cout << "Fekete sakkban van\n";
-        return BLACK;
+    if (isAttacked(wx,wy,BLACK)) {
+        _gd->_checkWhite = true;
+    } else {
+        _gd->_checkWhite = false;
     }
-    return NEITHER;
 
+    if (isAttacked(bx,by,WHITE)) {
+        _gd->_checkBlack = true;
+    } else {
+        _gd->_checkBlack = false;
+    }
 }
 
+bool Game::isAttacked(int dx, int dy,Side attackedBy) {
+    for (int i=0; i<GameData::BOARD_SIZE; ++i) {
+        for (int j = 0; j < GameData::BOARD_SIZE; ++j) {
+            if (_gd->_boardSide[i][j] == attackedBy) {
+                if (canMove(i,j,dx,dy)) return true;
+            }
+        }
+    }
+    return false;
+}
 
+void Game::saveMove(int x, int y, int dx, int dy) {
+    lastMove.saved = true;
+    lastMove.x = x;
+    lastMove.y = y;
+    lastMove.dx = dx;
+    lastMove.dy = dy;
+    lastMove.s = _gd->_boardSide[x][y];
+    lastMove.ds = _gd->_boardSide[dx][dy];
+    lastMove.t = _gd->_boardType[x][y];
+    lastMove.dt = _gd->_boardType[dx][dy];
+}
+
+void Game::move(int x, int y, int dx, int dy) {
+    saveMove(x,y,dx,dy);
+
+    _gd->_boardType[dx][dy] = _gd->_boardType[x][y];
+    _gd->_boardSide[dx][dy] = _gd->_boardSide[x][y];
+
+    _gd->_boardType[x][y] = NONE;
+    _gd->_boardSide[x][y] = NEITHER;
+
+    if (_gd->_sideToMove == WHITE) _gd->_sideToMove = BLACK;
+    else _gd->_sideToMove = WHITE;
+}
+
+void Game::unmove() {
+    if (!lastMove.saved) return;
+    lastMove.saved = false;
+    _gd->_boardType[lastMove.x][lastMove.y] = lastMove.t;
+    _gd->_boardType[lastMove.dx][lastMove.dy] = lastMove.dt;
+    _gd->_boardSide[lastMove.x][lastMove.y] = lastMove.s;
+    _gd->_boardSide[lastMove.dx][lastMove.dy] = lastMove.ds;
+
+    if (_gd->_sideToMove == WHITE) _gd->_sideToMove = BLACK;
+    else _gd->_sideToMove = WHITE;
+}
+
+bool Game::overallCheck(int x, int y, int dx, int dy) {
+    if (!canMove(x,y,dx,dy)) return false;
+
+    move(x,y,dx,dy);
+    check();
+    unmove();
+
+    if (_gd->_sideToMove == WHITE) {
+        if (_gd->_checkWhite) return false;
+    } else {
+        if (_gd->_checkBlack) return false;
+    }
+    return true;
+}
