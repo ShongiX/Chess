@@ -6,6 +6,7 @@
 #define SAKK_MENU_H
 
 #include <vector>
+#include <functional>
 #include "Widget.hpp"
 
 class GameData;
@@ -24,13 +25,15 @@ public:
 
 class GameMenu : public Menu {
     GameData* _gd{};
-
+    std::function<void(const std::string& message)> _dead = std::function<void(const std::string& message)>();
     void searchAttackedTiles();
 
 public:
     void handle(const genv::event& ev, int &focus) override;
     void build();
     void setInfo(GameData* gd);
+
+    void setFunc(const std::function<void(const std::string& message)>& dead);
 };
 
 

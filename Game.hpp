@@ -6,6 +6,7 @@
 #define SAKK_GAME_HPP
 
 #include <vector>
+#include <functional>
 #include "GameData.hpp"
 
 struct Move {
@@ -19,8 +20,9 @@ struct Move {
 };
 
 class Game {
-    GameData* _gd{};
+    //std::function<void()> _deadFunction = std::function<void()>();
 
+    GameData* _gd{};
     Move lastMove;
 
     bool checkLine(int x, int y, int dx, int dy);
@@ -37,6 +39,10 @@ public:
     void move(int x, int y, int dx, int dy);
     void unmove();
     bool overallCheck(int x, int y, int dx, int dy);
+
+    void checkGameOver();
+
+    //void setFunc(const std::function<void()>& dead);
 };
 
 

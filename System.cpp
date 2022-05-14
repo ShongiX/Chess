@@ -29,15 +29,12 @@ System::System(int XX, int YY, int FPS) : _XX(XX), _YY(YY), _FPS(FPS) {
 }
 
 void System::init() {
+    _menus[State::PLAY] = buildGameMenu();
     _game = new Game();
     Controller::init(_game,_gameMenu);
     Controller::getInfo();
     Controller::sendInfo();
     _gameMenu->build();
-
-    //controller = new Controller(game, gameMenu);
-    //game->setFunc([&](){ changeState(DEAD); });
-
 }
 
 void System::run() {
@@ -58,8 +55,7 @@ void System::run() {
 
             if (_state == PLAY) {
                 //game loop timer
-                loopCount++;
-                if (loopCount >= _REFRESH && _game) {
+                if (++loopCount >= _REFRESH && _game) {
 
                     Controller::getInfo();
                     Controller::sendInfo();
@@ -97,7 +93,7 @@ Menu* System::buildMainMenu() {
     Menu* menu = new Menu();
 
     new Sprite(menu,_XX/4,0,"../resources/Title.txt");
-    new Button(menu,_XX/2-BUTTON_WIDTH/2,_YY/4+BUTTON_HEIGHT*0.0,BUTTON_WIDTH,BUTTON_HEIGHT,"Start",[this](){changeState(State::PLAY);});
+    new Button(menu,_XX/2-BUTTON_WIDTH/2,_YY/4+BUTTON_HEIGHT*0.0,BUTTON_WIDTH,BUTTON_HEIGHT,"Start",[this](){init(); changeState(State::PLAY);});
     new Button(menu,_XX/2-BUTTON_WIDTH/2,_YY/4+BUTTON_HEIGHT*1.2,BUTTON_WIDTH,BUTTON_HEIGHT,"How to play?",[this](){changeState(State::RULES);});
     new Button(menu,_XX/2-BUTTON_WIDTH/2,_YY/4+BUTTON_HEIGHT*2.4,BUTTON_WIDTH,BUTTON_HEIGHT,"Info",[this](){changeState(State::INFO);});
     new Button(menu,_XX/2-BUTTON_WIDTH/2,_YY/4+BUTTON_HEIGHT*3.6,BUTTON_WIDTH,BUTTON_HEIGHT,"Credits",[this](){changeState(State::CREDITS);});
@@ -136,6 +132,12 @@ Menu *System::buildGameMenu() {
     _gameMenu = new GameMenu();
 
     new Board(_gameMenu,0,0,_XX,_YY);
+
+    _gameMenu->setFunc([this](const std::string& message){
+        new Text(_gameMenu,250,375,300,50,message);
+        new Button(_gameMenu,325,430,150,70,"Restart",[this](){init(); changeState(State::PLAY);});
+        new Button(_gameMenu,325,510,150,70,"Back",[this](){ changeState(MAIN);});
+    });
 
     return _gameMenu;
 }

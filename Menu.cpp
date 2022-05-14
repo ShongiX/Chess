@@ -7,6 +7,8 @@
 #include "GameData.hpp"
 #include "Piece.hpp"
 #include "Controller.hpp"
+#include "Text.hpp"
+#include "Button.hpp"
 
 using namespace genv;
 
@@ -44,32 +46,36 @@ void Menu::resetFocus(int focus) {
 }
 
 void GameMenu::handle(const event &ev, int &focus) {
-    if (ev.type == ev_mouse) {
-        int x = ev.pos_x / Board::TILE_SIZE;
-        int y = ev.pos_y / Board::TILE_SIZE;
+    if (_gd->_gameOver) {
+        Menu::handle(ev,focus);
+    } else {
+        if (ev.type == ev_mouse) {
+            int x = ev.pos_x / Board::TILE_SIZE;
+            int y = ev.pos_y / Board::TILE_SIZE;
 
-        if (ev.button == btn_left) {
-            if (_gd->_boardSide[x][y] == _gd->_sideToMove) { //switching piece
-                if (Board::_activeTileX == x && Board::_activeTileY == y) {
-                    Board::_activeTileX = -1;
-                    Board::_activeTileY = -1;
-                } else {
-                    Board::_activeTileX = x;
-                    Board::_activeTileY = y;
+            if (ev.button == btn_left) {
+                if (_gd->_boardSide[x][y] == _gd->_sideToMove) { //switching piece
+                    if (Board::_activeTileX == x && Board::_activeTileY == y) {
+                        Board::_activeTileX = -1;
+                        Board::_activeTileY = -1;
+                    } else {
+                        Board::_activeTileX = x;
+                        Board::_activeTileY = y;
 
-                    searchAttackedTiles();
+                        searchAttackedTiles();
+                    }
+                } else if (Board::_activeTileX != -1) { //attempting to move
+                    if (Controller::askIfCanMove(Board::_activeTileX,Board::_activeTileY,x,y)) {
+                        Controller::move(Board::_activeTileX,Board::_activeTileY,x,y);
+                        Board::_activeTileX = -1;
+                        Board::_activeTileY = -1;
+                    }
                 }
-            } else if (Board::_activeTileX != -1) { //attempting to move
-                 if (Controller::askIfCanMove(Board::_activeTileX,Board::_activeTileY,x,y)) {
-                     Controller::move(Board::_activeTileX,Board::_activeTileY,x,y);
-                     Board::_activeTileX = -1;
-                     Board::_activeTileY = -1;
-                 }
             }
-        }
-    } else if (ev.type == ev_key) {
-        if (ev.keycode == key_left) {
-            Controller::unmove();
+        } else if (ev.type == ev_key) {
+            if (ev.keycode == key_left) {
+                Controller::unmove();
+            }
         }
     }
 }
@@ -106,6 +112,15 @@ void GameMenu::build() {
             }
         }
     }
+
+    if (_gd->_gameOver) {
+        std::string message = "The game is over. ";
+        if (_gd->_checkWhite) message += "Black won!";
+        else if (_gd->_checkBlack) message += "White won!";
+        else message += "It's a tie!";
+
+        _dead(message);
+    }
 }
 
 void GameMenu::setInfo(GameData* gd) {
@@ -125,4 +140,8 @@ void GameMenu::searchAttackedTiles() {
             }
         }
     }
+}
+
+void GameMenu::setFunc(const std::function<void(const std::string& message)> &dead) {
+    _dead = dead;
 }

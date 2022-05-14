@@ -5,6 +5,7 @@
 #include "Game.hpp"
 #include "Piece.hpp"
 #include <cstdlib>
+#include <iostream>
 
 Game::Game() {
     _gd = new GameData();
@@ -133,7 +134,7 @@ void Game::check() {
     int wx,wy;
     int bx,by;
 
-    for (int i=0; i<GameData::BOARD_SIZE; ++i) {
+    for (int i = 0; i<GameData::BOARD_SIZE; ++i) {
         for (int j = 0; j < GameData::BOARD_SIZE; ++j) {
             if (_gd->_boardType[i][j] == KING) {
                 if (_gd->_boardSide[i][j] == WHITE) {
@@ -161,7 +162,7 @@ void Game::check() {
 }
 
 bool Game::isAttacked(int dx, int dy,Side attackedBy) {
-    for (int i=0; i<GameData::BOARD_SIZE; ++i) {
+    for (int i = 0; i<GameData::BOARD_SIZE; ++i) {
         for (int j = 0; j < GameData::BOARD_SIZE; ++j) {
             if (_gd->_boardSide[i][j] == attackedBy) {
                 if (canMove(i,j,dx,dy)) return true;
@@ -222,3 +223,46 @@ bool Game::overallCheck(int x, int y, int dx, int dy) {
     }
     return true;
 }
+
+void Game::checkGameOver() {
+    bool arePossibleMoves = false;
+
+    for (int i = 0; i<GameData::BOARD_SIZE && !arePossibleMoves; ++i) {
+        for (int j = 0; j < GameData::BOARD_SIZE && !arePossibleMoves; ++j) {
+            if (_gd->_boardSide[i][j] == _gd->_sideToMove) {
+                for (int di = 0; di<GameData::BOARD_SIZE && !arePossibleMoves; ++di) {
+                    for (int dj = 0; dj < GameData::BOARD_SIZE && !arePossibleMoves; ++dj) {
+                        if (i == di && j == dj) continue; //source and destination are the same
+                        if (_gd->_boardSide[di][dj] == _gd->_sideToMove) continue; //destination occupied
+                        if (overallCheck(i,j,di,dj)) {
+                            arePossibleMoves = true;
+                            //printf("%d,%d -> %d,%d\n",i,j,di,dj);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    if (arePossibleMoves) return;
+
+    _gd->_gameOver = true;
+    check();
+    if (_gd->_checkBlack) {
+        std::cout << "White won\n";
+        //_deadFunction();
+        return;
+    }
+    if (_gd->_checkWhite) {
+
+        std::cout << "Black won\n";
+        //_deadFunction();
+        return;
+    }
+    std::cout << "The game is a tie\n";
+    //_deadFunction();
+}
+
+/*void Game::setFunc(const std::function<void()>& deadFunction) {
+    _deadFunction = deadFunction;
+}*/
