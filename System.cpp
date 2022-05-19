@@ -2,7 +2,6 @@
 // Created by laccs on 5/6/2022.
 //
 
-#include <iostream>
 #include "System.hpp"
 #include "Menu.hpp"
 #include "Button.hpp"
@@ -107,6 +106,8 @@ Menu *System::buildRulesMenu() {
     Menu* menu = new Menu();
 
     new Button(menu,_XX/2-BUTTON_WIDTH/2,_YY/4+BUTTON_HEIGHT*0.0,BUTTON_WIDTH,BUTTON_HEIGHT,"Back",[this](){changeState(State::MAIN);});
+    new Text(menu,_XX/2-BUTTON_WIDTH*1.5,_YY/4+BUTTON_HEIGHT*2,BUTTON_WIDTH*3,BUTTON_HEIGHT/2,"Basic Chess.");
+    new Text(menu,_XX/2-BUTTON_WIDTH*1.5,_YY/4+BUTTON_HEIGHT*2.5,BUTTON_WIDTH*3,BUTTON_HEIGHT/2,"Click a piece to see where it can move");
 
     return menu;
 }
@@ -115,6 +116,8 @@ Menu *System::buildInfoMenu() {
     Menu* menu = new Menu();
 
     new Button(menu,_XX/2-BUTTON_WIDTH/2,_YY/4+BUTTON_HEIGHT*0.0,BUTTON_WIDTH,BUTTON_HEIGHT,"Back",[this](){changeState(State::MAIN);});
+    new Text(menu,_XX/2-BUTTON_WIDTH*1.5,_YY/4+BUTTON_HEIGHT*2,BUTTON_WIDTH*3,BUTTON_HEIGHT/2,"Castling and En Passant not implemented");
+    new Text(menu,_XX/2-BUTTON_WIDTH*1.5,_YY/4+BUTTON_HEIGHT*2.5,BUTTON_WIDTH*3,BUTTON_HEIGHT/2,"No AI (lack of time)");
 
     return menu;
 }
@@ -124,7 +127,7 @@ Menu *System::buildCreditMenu() {
     Menu* menu = new Menu();
 
     new Button(menu,_XX/2-BUTTON_WIDTH/2,_YY/4+BUTTON_HEIGHT*0.0,BUTTON_WIDTH,BUTTON_HEIGHT,"Back",[this](){changeState(State::MAIN);});
-    new Text(menu,_XX/2,_YY/2,0,0,"Created by: Laccs");
+    new Text(menu,_XX/2-BUTTON_WIDTH,_YY/2-BUTTON_HEIGHT/4,BUTTON_WIDTH*2,BUTTON_HEIGHT/2,"Created by: Laccs");
 
     return menu;
 }
@@ -155,14 +158,3 @@ Menu *System::buildGameMenu() {
 
     return _gameMenu;
 }
-
-
-
-
-
-
-
-
-
-
-
