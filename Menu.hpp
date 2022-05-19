@@ -8,6 +8,7 @@
 #include <vector>
 #include <functional>
 #include "Widget.hpp"
+#include "Enums.hpp"
 
 class GameData;
 
@@ -26,14 +27,20 @@ public:
 class GameMenu : public Menu {
     GameData* _gd{};
     std::function<void(const std::string& message)> _dead = std::function<void(const std::string& message)>();
+
     void searchAttackedTiles();
 
 public:
     void handle(const genv::event& ev, int &focus) override;
+    void update();
     void build();
     void setInfo(GameData* gd);
 
     void setFunc(const std::function<void(const std::string& message)>& dead);
+    void setFunc(const std::function<void(Side sideToMove)>& promote);
+
+    std::function<void(Side sideToMove)> _promote = std::function<void(Side sideToMove)>();
+    bool promotion = false;
 };
 
 

@@ -24,3 +24,9 @@ Color Color::opacity(Color background, float alpha) {
             (1-alpha) * background.b + alpha * b
     );
 }
+
+void Box::draw() {
+    genv::gout << genv::move_to(_x,_y) << genv::color(150,150,150) << genv::box(_sx,_sy);
+}
+
+Box::Box(Menu* m, int x, int y, int sx, int sy) : Widget(m,x,y,sx,sy) {}

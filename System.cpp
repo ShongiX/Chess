@@ -7,7 +7,7 @@
 #include "Menu.hpp"
 #include "Button.hpp"
 #include "Text.hpp"
-#include "Piece.hpp"
+#include "Board.hpp"
 #include "Game.hpp"
 #include "Controller.hpp"
 
@@ -64,6 +64,7 @@ void System::run() {
                     loopCount = 0;
 
                     _gameMenu->build();
+                    _gameMenu->update();
                 }
             }
 
@@ -134,9 +135,22 @@ Menu *System::buildGameMenu() {
     new Board(_gameMenu,0,0,_XX,_YY);
 
     _gameMenu->setFunc([this](const std::string& message){
+        new Box(_gameMenu,_XX/4,_YY/2-BUTTON_HEIGHT,_XX/2,_YY/4+BUTTON_HEIGHT);
         new Text(_gameMenu,250,375,300,50,message);
         new Button(_gameMenu,325,430,150,70,"Restart",[this](){init(); changeState(State::PLAY);});
         new Button(_gameMenu,325,510,150,70,"Back",[this](){ changeState(MAIN);});
+    });
+
+    _gameMenu->setFunc([this](Side sideToMove){
+        _gameMenu->promotion = true;
+
+        new Box(_gameMenu,_XX/4,_YY/2-BUTTON_HEIGHT,_XX/2,_YY/4+BUTTON_HEIGHT);
+        new Text(_gameMenu,250,350,300,50,"Choose piece:");
+
+        new Button(_gameMenu,_XX/2-BUTTON_WIDTH/2,425+BUTTON_HEIGHT*0.0,BUTTON_WIDTH,BUTTON_HEIGHT/2,"Queen",[this](){_gameMenu->promotion = false; Controller::promote(QUEEN); changeState(State::PLAY);});
+        new Button(_gameMenu,_XX/2-BUTTON_WIDTH/2,425+BUTTON_HEIGHT*0.6,BUTTON_WIDTH,BUTTON_HEIGHT/2,"Rook",[this](){_gameMenu->promotion = false; Controller::promote(ROOK); changeState(State::PLAY);});
+        new Button(_gameMenu,_XX/2-BUTTON_WIDTH/2,425+BUTTON_HEIGHT*1.2,BUTTON_WIDTH,BUTTON_HEIGHT/2,"Knight",[this](){_gameMenu->promotion = false; Controller::promote(KNIGHT); changeState(State::PLAY);});
+        new Button(_gameMenu,_XX/2-BUTTON_WIDTH/2,425+BUTTON_HEIGHT*1.8,BUTTON_WIDTH,BUTTON_HEIGHT/2,"Bishop",[this](){_gameMenu->promotion = false; Controller::promote(BISHOP); changeState(State::PLAY);});
     });
 
     return _gameMenu;

@@ -35,6 +35,10 @@ void Controller::move(int x, int y, int dx, int dy) {
     _game->checkGameOver();
 }
 
-void Controller::unmove() {
-    _game->unmove();
+void Controller::promote(Side sideToMove) {
+    _gameMenu->_promote(sideToMove);
+}
+
+void Controller::promote(Type typeChosen) {
+    _game->promotePawn(typeChosen);
 }

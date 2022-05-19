@@ -5,6 +5,8 @@
 #ifndef SAKK_CONTROLLER_HPP
 #define SAKK_CONTROLLER_HPP
 
+#include "Enums.hpp"
+
 class Game;
 class GameMenu;
 class GameData;
@@ -24,7 +26,9 @@ public:
 
     static bool askIfCanMove(int x, int y, int dx, int dy);
     static void move(int x, int y, int dx, int dy);
-    static void unmove();
+
+    static void promote(Side sideToMove);
+    static void promote(Type typeChosen);
 };
 
 

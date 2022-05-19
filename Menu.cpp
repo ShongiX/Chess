@@ -5,10 +5,9 @@
 #include <iostream>
 #include "Menu.hpp"
 #include "GameData.hpp"
-#include "Piece.hpp"
+#include "Board.hpp"
 #include "Controller.hpp"
 #include "Text.hpp"
-#include "Button.hpp"
 
 using namespace genv;
 
@@ -46,7 +45,7 @@ void Menu::resetFocus(int focus) {
 }
 
 void GameMenu::handle(const event &ev, int &focus) {
-    if (_gd->_gameOver) {
+    if (_gd->_gameOver || promotion) {
         Menu::handle(ev,focus);
     } else {
         if (ev.type == ev_mouse) {
@@ -72,11 +71,18 @@ void GameMenu::handle(const event &ev, int &focus) {
                     }
                 }
             }
-        } else if (ev.type == ev_key) {
-            if (ev.keycode == key_left) {
-                Controller::unmove();
-            }
         }
+    }
+}
+
+void GameMenu::update() {
+    if (_gd->_gameOver) {
+        std::string message = "The game is over. ";
+        if (_gd->_checkWhite) message += "Black won!";
+        else if (_gd->_checkBlack) message += "White won!";
+        else message += "It's a tie!";
+
+        _dead(message);
     }
 }
 
@@ -94,33 +100,26 @@ void GameMenu::build() {
                 
                 std::string fileName = "../resources/";
                 if (s == WHITE) {
-                    if (t == 0) {fileName += "wQ.txt";}
-                    else if (t == 1) {fileName += "wR.txt";}
-                    else if (t == 2) {fileName += "wN.txt";}
-                    else if (t == 3) {fileName += "wB.txt";}
-                    else if (t == 4) {fileName += "wP.txt";}
-                    else {fileName += "wK.txt";}
+                    if (t == QUEEN) {fileName += "wQ.txt";}
+                    else if (t == ROOK) {fileName += "wR.txt";}
+                    else if (t == KNIGHT) {fileName += "wN.txt";}
+                    else if (t == BISHOP) {fileName += "wB.txt";}
+                    else if (t == PAWN) {fileName += "wP.txt";}
+                    else {fileName += "wK.txt";} //KING
                 } else {
-                    if (t == 0) {fileName += "bQ.txt";}
-                    else if (t == 1) {fileName += "bR.txt";}
-                    else if (t == 2) {fileName += "bN.txt";}
-                    else if (t == 3) {fileName += "bB.txt";}
-                    else if (t == 4) {fileName += "bP.txt";}
-                    else {fileName += "bK.txt";}
+                    if (t == QUEEN) {fileName += "bQ.txt";}
+                    else if (t == ROOK) {fileName += "bR.txt";}
+                    else if (t == KNIGHT) {fileName += "bN.txt";}
+                    else if (t == BISHOP) {fileName += "bB.txt";}
+                    else if (t == PAWN) {fileName += "bP.txt";}
+                    else {fileName += "bK.txt";} //KING
                 }
                 new Sprite(this,i*Board::TILE_SIZE,j*Board::TILE_SIZE,fileName);
             }
         }
     }
 
-    if (_gd->_gameOver) {
-        std::string message = "The game is over. ";
-        if (_gd->_checkWhite) message += "Black won!";
-        else if (_gd->_checkBlack) message += "White won!";
-        else message += "It's a tie!";
-
-        _dead(message);
-    }
+    if (promotion) _promote(_gd->_sideToMove);
 }
 
 void GameMenu::setInfo(GameData* gd) {
@@ -144,4 +143,8 @@ void GameMenu::searchAttackedTiles() {
 
 void GameMenu::setFunc(const std::function<void(const std::string& message)> &dead) {
     _dead = dead;
+}
+
+void GameMenu::setFunc(const std::function<void(Side sideToMove)> &promote) {
+    _promote = promote;
 }

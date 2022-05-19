@@ -20,10 +20,10 @@ struct Move {
 };
 
 class Game {
-    //std::function<void()> _deadFunction = std::function<void()>();
-
     GameData* _gd{};
     Move lastMove;
+
+    bool promotionCalled = false;
 
     bool checkLine(int x, int y, int dx, int dy);
     bool checkDiag(int x, int y, int dx, int dy);
@@ -42,7 +42,7 @@ public:
 
     void checkGameOver();
 
-    //void setFunc(const std::function<void()>& dead);
+    void promotePawn(Type typeChosen);
 };
 
 

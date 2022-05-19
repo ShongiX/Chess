@@ -3,7 +3,8 @@
 //
 
 #include "Game.hpp"
-#include "Piece.hpp"
+#include "Board.hpp"
+#include "Controller.hpp"
 #include <cstdlib>
 #include <iostream>
 
@@ -54,7 +55,20 @@ GameData *Game::getInfo() {
     return _gd;
 }
 
-void Game::update() {}
+void Game::update() {
+    if (!promotionCalled) {
+        for (auto & i : _gd->_boardType) {
+            if (i[0] == PAWN) {
+                Controller::promote(WHITE);
+                promotionCalled = true;
+            }
+            if (i[7] == PAWN) {
+                Controller::promote(BLACK);
+                promotionCalled = true;
+            }
+        }
+    }
+}
 
 bool Game::checkLine(int x, int y, int dx, int dy) {
     if (x == dx) {
@@ -114,13 +128,21 @@ bool Game::canMove(int x, int y, int dx, int dy) {
         } else if (t == PAWN) {
             if (s == WHITE) {
                 if (x == dx && dy-y == -1 && _gd->_boardType[dx][dy] == NONE) return true; //if one forward, no piece at destination
-                if (x == dx && dy-y == -2 && y == 6 && _gd->_boardType[dx][y-1] == NONE && _gd->_boardType[dx][dy] == NONE) return true; //if two forward, initial place and no piece at destination
+                if (x == dx && dy-y == -2 && y == 6 && _gd->_boardType[dx][y-1] == NONE && _gd->_boardType[dx][dy] == NONE) {
+                    //if ( (x-1>=0 && _gd->_boardSide[dx-1][dy] == BLACK && _gd->_boardType[dx-1][dy] == PAWN) || (x+1<=GameData::BOARD_SIZE && _gd->_boardSide[dx+1][dy] == BLACK && _gd->_boardType[dx+1][dy] == PAWN) ) _gd->_enPassant = true;
+                    return true; //if two forward, initial place and no piece at destination
+                }
                 if (abs(x-dx) == 1 && dy-y == -1 && _gd->_boardType[dx][dy] != NONE) return true; //if one diagonal, piece taken
+                //if (abs(x-dx) == 1 && dy-y == -1 && _gd->_enPassant && _gd->_boardType[dx][y] == PAWN) return true; //en passant
                 return false;
             } else {
                 if (x == dx && dy-y == 1 && _gd->_boardType[dx][dy] == NONE) return true; //if one forward, no piece at destination
-                if (x == dx && dy-y == 2 && y == 1 && _gd->_boardType[dx][y+1] == NONE && _gd->_boardType[dx][dy] == NONE) return true; //if two forward, initial place and no piece at destination
+                if (x == dx && dy-y == 2 && y == 1 && _gd->_boardType[dx][y+1] == NONE && _gd->_boardType[dx][dy] == NONE) {
+                    //if ( (x-1>=0 && _gd->_boardSide[dx-1][dy] == WHITE && _gd->_boardType[dx-1][dy] == PAWN) || (x+1<=GameData::BOARD_SIZE && _gd->_boardSide[dx+1][dy] == BLACK && _gd->_boardType[dx+1][dy] == PAWN) ) _gd->_enPassant = true;
+                    return true; //if two forward, initial place and no piece at destination
+                }
                 if (abs(x-dx) == 1 && dy-y == 1 && _gd->_boardType[dx][dy] != NONE) return true; //if one diagonal, piece taken
+                //if (abs(x-dx) == 1 && dy-y == 1 && _gd->_boardType[x][dy] == PAWN && _gd->_enPassant) return true; //en passant
                 return false;
             }
         } else { //KING
@@ -236,7 +258,6 @@ void Game::checkGameOver() {
                         if (_gd->_boardSide[di][dj] == _gd->_sideToMove) continue; //destination occupied
                         if (overallCheck(i,j,di,dj)) {
                             arePossibleMoves = true;
-                            //printf("%d,%d -> %d,%d\n",i,j,di,dj);
                         }
                     }
                 }
@@ -250,19 +271,26 @@ void Game::checkGameOver() {
     check();
     if (_gd->_checkBlack) {
         std::cout << "White won\n";
-        //_deadFunction();
         return;
     }
     if (_gd->_checkWhite) {
 
         std::cout << "Black won\n";
-        //_deadFunction();
         return;
     }
     std::cout << "The game is a tie\n";
-    //_deadFunction();
 }
 
-/*void Game::setFunc(const std::function<void()>& deadFunction) {
-    _deadFunction = deadFunction;
-}*/
+void Game::promotePawn(Type typeChosen) {
+    promotionCalled = false;
+    for (int i = 0; i < GameData::BOARD_SIZE; ++i) {
+        if (_gd->_boardType[i][0] == PAWN) {
+            _gd->_boardType[i][0] = typeChosen;
+            return;
+        }
+        if (_gd->_boardType[i][7] == PAWN) {
+            _gd->_boardType[i][7] = typeChosen;
+            return;
+        }
+    }
+}

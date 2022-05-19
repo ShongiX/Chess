@@ -2,8 +2,8 @@
 // Created by laccs on 5/7/2022.
 //
 
-#ifndef SAKK_PIECE_HPP
-#define SAKK_PIECE_HPP
+#ifndef SAKK_BOARD_HPP
+#define SAKK_BOARD_HPP
 
 #include "Sprite.hpp"
 #include "Enums.hpp"
@@ -24,18 +24,4 @@ public:
     bool isFocusable() override;
 };
 
-/*class Piece : public Sprite {
-protected:
-    Type _type;
-    Side _side;
-    bool _active = false;
-
-public:
-    Piece(Menu* m,int x, int y, Type type, Side side);
-    void draw() override;
-    void handle(const genv::event& ev) override;
-    bool isFocusable() override;
-};
-*/
-
-#endif //SAKK_PIECE_HPP
+#endif //SAKK_BOARD_HPP

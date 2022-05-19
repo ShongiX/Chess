@@ -35,4 +35,11 @@ struct Color {
     Color opacity(Color background, float alpha);
 };
 
+struct Box : public Widget {
+public:
+    Box(Menu* m ,int x, int y, int sx, int sy);
+    void draw() override;
+    bool isFocusable() override {return false;}
+};
+
 #endif //SAKK_WIDGET_HPP
